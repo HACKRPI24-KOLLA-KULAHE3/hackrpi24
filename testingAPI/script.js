@@ -1,44 +1,45 @@
-// Your primary API key
-const apiKey = 'b969575cc3f74ab5a157e053c13315d3';
+// Fetch and display NYC events from the API
+function fetchNYCEvents() {
+    const apiKey = 'b969575cc3f74ab5a157e053c13315d3'; // Replace with your primary key if needed
+    
+    // Set the start and end dates as per your updated request
+    const startDate = '11/09/2024 12:00 AM';
+    const endDate = '12/07/2024 12:00 AM';
 
-// Endpoint URL for the /search API
-const apiUrl = 'https://api.nyc.gov/calendar/search?startDate=11/09/2024';
-
-// Fetch events from the API and display them on the front end
-async function fetchAndDisplayEvents() {
-    try {
-        const response = await fetch(apiUrl, {
-            headers: {
-                'Ocp-Apim-Subscription-Key': apiKey
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+    // Fetch events using the NYC Events API
+    fetch(`https://api.nyc.gov/calendar/search?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&sort=DATE`, {
+        method: 'GET',
+        headers: {
+            'Cache-Control': 'no-cache',
+            'Ocp-Apim-Subscription-Key': apiKey
         }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const eventsContainer = document.getElementById('events-container');
+        eventsContainer.innerHTML = ''; // Clear previous content
 
-        const data = await response.json();
-        const eventsContainer = document.getElementById('events');
-
-        if (data.length === 0) {
-            eventsContainer.innerHTML = '<p>No events found for your search criteria.</p>';
-        } else {
-            data.forEach(event => {
-                const eventElement = document.createElement('div');
-                eventElement.innerHTML = `
-                    <h2>${event.eventName}</h2>
-                    <p><strong>Date:</strong> ${event.eventDate}</p>
-                    <p><strong>Location:</strong> ${event.eventLocation}</p>
-                    <p>${event.eventDescription}</p>
+        if (data.events && data.events.length > 0) {
+            data.events.forEach(event => {
+                const eventDiv = document.createElement('div');
+                eventDiv.classList.add('event');
+                eventDiv.innerHTML = `
+                    <h2>${event.title}</h2>
+                    <p><strong>Date:</strong> ${event.startDate}</p>
+                    <p><strong>Location:</strong> ${event.location || 'TBD'}</p>
+                    <p>${event.description || 'No description available.'}</p>
                 `;
-                eventsContainer.appendChild(eventElement);
+                eventsContainer.appendChild(eventDiv);
             });
+        } else {
+            eventsContainer.innerHTML = '<p>No events found for the selected date range.</p>';
         }
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Error fetching events:', error);
-        document.getElementById('events').innerHTML = '<p>Error fetching events. Please try again later.</p>';
-    }
+        document.getElementById('events-container').innerHTML = '<p>Failed to load events.</p>';
+    });
 }
 
-// Call the function to fetch and display events
-fetchAndDisplayEvents();
+// Call the function to fetch events when the script is loaded
+fetchNYCEvents();
