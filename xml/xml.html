@@ -22,6 +22,11 @@
                 const text = await response.text();
                 const parser = new DOMParser();
                 const xml = parser.parseFromString(text, "application/xml");
+
+                if (xml.getElementsByTagName('parsererror').length > 0) {
+                    throw new Error('Error parsing XML');
+                }
+
                 const items = xml.getElementsByTagName('item');
 
                 for (let item of items) {
@@ -34,6 +39,7 @@
                     const startDateElement = item.getElementsByTagName('event:startdate')[0];
                     const startTimeElement = item.getElementsByTagName('event:starttime')[0];
                     const locationElement = item.getElementsByTagName('event:location')[0];
+                    const coordinatesElement = item.getElementsByTagName('event:coordinates')[0];
 
                     const title = titleElement ? titleElement.textContent : 'No title available';
                     const link = linkElement ? linkElement.textContent : '#';
@@ -41,6 +47,52 @@
                     const startDate = startDateElement ? startDateElement.textContent : 'No date available';
                     const startTime = startTimeElement ? startTimeElement.textContent : 'No time available';
                     const location = locationElement ? locationElement.textContent : 'No location available';
+                    const coordinates = coordinatesElement ? coordinatesElement.textContent : 'No coordinates available';
+
+                    let latitude = 'N/A';
+                    let longitude = 'N/A';
+                    let fullAddress = 'Address not available';
+                    let borough = 'Borough not available';
+                    let neighborhood = 'Neighborhood not available';
+
+                    if (coordinates !== 'No coordinates available') {
+                        [latitude, longitude] = coordinates.split(',').map(coord => coord.trim());
+                        
+                        // Fetch full address using Google Maps Geocoding API
+                        try {
+                            const geoResponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyD9AHcZ354omb7QqEyx2xtSZKaed7thlUs`);
+                            const geoData = await geoResponse.json();
+
+                            if (geoData.status === 'OK' && geoData.results.length > 0) {
+                                fullAddress = geoData.results[0].formatted_address;
+                                
+                                // Extract borough and neighborhood from address components
+                                const addressComponents = geoData.results[0].address_components;
+                                for (let component of addressComponents) {
+                                    if (component.types.includes('neighborhood')) {
+                                        neighborhood = component.long_name;
+                                    }
+                                    if (component.types.includes('sublocality') || component.types.includes('sublocality_level_1')) {
+                                        borough = component.long_name;
+                                    }
+                                }
+
+                                // Ensure borough is correctly set if only `political` type contains it
+                                if (borough === 'Borough not available') {
+                                    for (let component of addressComponents) {
+                                        if (component.types.includes('political') && !component.types.includes('country')) {
+                                            borough = component.long_name;
+                                            break;
+                                        }
+                                    }
+                                }
+                            } else {
+                                console.warn('Geocoding API response error:', geoData.status);
+                            }
+                        } catch (geoError) {
+                            console.error('Error fetching address:', geoError);
+                        }
+                    }
 
                     // Filter out specific details from the description
                     const filteredDescription = description
@@ -55,6 +107,10 @@
                         <p><strong>Date:</strong> ${startDate}</p>
                         <p><strong>Time:</strong> ${startTime}</p>
                         <p><strong>Location:</strong> ${location}</p>
+                        <p><strong>Coordinates:</strong> Latitude: ${latitude}, Longitude: ${longitude}</p>
+                        <p><strong>Full Address:</strong> ${fullAddress}</p>
+                        <p><strong>Borough:</strong> ${borough}</p>
+                        <p><strong>Neighborhood:</strong> ${neighborhood}</p>
                         <p>${filteredDescription}</p>
                     `;
 
