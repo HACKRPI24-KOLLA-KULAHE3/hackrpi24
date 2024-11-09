@@ -3,37 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NYC Neighborhoods</title>
+    <title>NYC Event Form</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="display.js"></script> <!-- Script for displaying neighborhoods -->
     <script src="form.js"></script> <!-- Script for autofill form functionality -->
 </head>
 <body>
     <div class="headerBox">
-        <h1 class="title">NYC Neighborhoods</h1>
+        <h1 class="title">NYC Event Form</h1>
     </div>
 
-    <!-- Form for selecting borough and entering neighborhood name -->
-    <form id="neighborhood-form">
-        <label for="borough-select">Select Borough:</label>
-        <select id="borough-select">
-            <option value="">Choose a Borough</option>
-            <option value="Bronx">Bronx</option>
-            <option value="Brooklyn">Brooklyn</option>
-            <option value="Manhattan">Manhattan</option>
-            <option value="Queens">Queens</option>
-            <option value="Staten Island">Staten Island</option>
-        </select>
-        
-        <label for="neighborhood-input">Neighborhood:</label>
-        <input type="text" id="neighborhood-input" placeholder="Start typing neighborhood name">
-        
-        <div id="suggestions" class="suggestions"></div>
-    </form>
+    <div class="content">
+        <!-- Form for selecting borough, neighborhood, and date -->
+        <form id="neighborhood-form">
+            <label for="borough-select">Select Borough:</label>
+            <select id="borough-select">
+                <option value="">Choose a Borough</option>
+                <option value="Bronx">Bronx</option>
+                <option value="Brooklyn">Brooklyn</option>
+                <option value="Manhattan">Manhattan</option>
+                <option value="Queens">Queens</option>
+                <option value="Staten Island">Staten Island</option>
+            </select>
+            
+            <label for="neighborhood-input">Neighborhood:</label>
+            <input type="text" id="neighborhood-input" placeholder="Start typing neighborhood name">
+            
+            <!-- Dropdown for neighborhood suggestions -->
+            <select id="neighborhood-dropdown" size="5" style="display: none;"></select>
 
-    <!-- Display container for neighborhoods -->
-    <div id="neighborhood-display">
-        <!-- Neighborhood names and boroughs will be appended here by JavaScript -->
+            <!-- Date picker for selecting a date -->
+            <label for="date-input">Select Date:</label>
+            <input type="date" id="date-input">
+            
+            <!-- Go button to submit the form -->
+            <button type="button" id="go-button">Go</button>
+        </form>
     </div>
 
     <footer>

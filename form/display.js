@@ -1,6 +1,6 @@
 $(document).ready(function() {
     // Fetch the JSON data
-    fetch('form/jsonminifier.json') // Adjust path if necessary
+    fetch('jsonminifier.json') // Adjust path if necessary
         .then(response => response.json())
         .then(data => {
             // Access the features array
