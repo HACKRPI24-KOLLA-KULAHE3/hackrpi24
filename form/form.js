@@ -9,10 +9,11 @@ $(document).ready(function() {
             // Reference to the display container in HTML
             const $displayContainer = $('#neighborhood-display');
 
-            // Loop through each feature and display the neighborhood names
+            // Loop through each feature and display the neighborhood names and boroughs
             neighborhoods.forEach(feature => {
                 const neighborhoodName = feature.properties.name;
-                $displayContainer.append(`<p><strong>Neighborhood:</strong> ${neighborhoodName}</p>`);
+                const boroughName = feature.properties.borough;
+                $displayContainer.append(`<p><strong>Neighborhood:</strong> ${neighborhoodName} <br><strong>Borough:</strong> ${boroughName}</p>`);
             });
         })
         .catch(error => console.error('Error fetching neighborhoods data:', error));
