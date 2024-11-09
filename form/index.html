@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New York City Events Form</title>
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="form.js"></script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a class="logo" href="../index.html"><img src="../logo.png" width="50px" alt="Don'tGetSickInator logo"></a></li>
+            <li><a href="../index.html">HomePage</a></li>
+            <li><a href= "#">Form</a></li>        
+        </ul>
+    </nav>
+    <div class="headerBox">
+        <h1 class="title">Submit Event Form</h1>
+    </div>
+    <form id="hform">
+        <label for="dropdown-input-sym">Input Event Type:</label><br>
+        <div class="dropdown-container-sym">
+            <input type="text" id="dropdown-input-sym" placeholder="Type to filter options" autocomplete="off">
+            <ul id="dropdown-list-sym"></ul>
+        </div>
+        <div id="selected-options-sym"></div>
+        <div id="error-message-sym" style="display: none;">You must select at least one option.</div><br>
+        
+        <label for="dropdown-input-loc">Input Location Type (zip or borough):</label><br>
+        <div class="dropdown-container-loc">
+            <input type="text" id="dropdown-input-loc" placeholder="Type to filter options" autocomplete="off">
+            <ul id="dropdown-list-loc"></ul>
+        </div>
+        <div id="selected-options-loc"></div>
+        <div id="error-message-loc" style="display: none;">You must select at least one option.</div><br>
+
+        <label for="datepicker">Location:</label><br>
+        <input type="text" id="datepicker" placeholder="Press to open date picker" readonly><br>
+
+        <button type="submit" id="submitButton">Submit</button> 
+        <br><br>
+    </form>
+    <footer>
+        &copy; 2024 kollia & kulahe3
+    </footer>
+</body>
+</html>
