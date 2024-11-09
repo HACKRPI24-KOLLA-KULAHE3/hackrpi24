@@ -1,0 +1,36 @@
+/* Basic reset to remove margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Ensure the body takes up the full viewport height */
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+}
+
+/* Main content container grows to push footer to the bottom */
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Header styling */
+.headerBox {
+    background-color: #f8f8f8;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Footer styles to keep it at the bottom */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 100%;
+    position: relative;
+}
