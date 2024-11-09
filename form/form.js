@@ -25,7 +25,7 @@ $(document).ready(function() {
                 return borough === selectedBorough && neighborhoodName.startsWith(inputText);
             });
 
-            // If there are matches, show the dropdown and populate it
+            // Show the dropdown with filtered options
             if (filteredNeighborhoods.length > 0) {
                 $('#neighborhood-dropdown').show();
                 filteredNeighborhoods.forEach(feature => {
@@ -40,23 +40,17 @@ $(document).ready(function() {
         }
     });
 
-    // Event listener for selecting a neighborhood from the dropdown
-    $('#neighborhood-dropdown').on('change', function() {
-        const selectedNeighborhood = $(this).val();
-        $('#neighborhood-input').val(selectedNeighborhood);
-        $('#neighborhood-dropdown').hide(); // Hide dropdown after selection
-    });
+    // Event listener for the "Go" button
+    $('#go-button').on('click', function() {
+        const selectedBorough = $('#borough-select').val();
+        const selectedNeighborhood = $('#neighborhood-input').val();
+        const selectedDate = $('#date-input').val();
 
-    // Hide dropdown when clicking outside of it
-    $(document).on('click', function(event) {
-        if (!$(event.target).closest('#neighborhood-input, #neighborhood-dropdown').length) {
-            $('#neighborhood-dropdown').hide();
+        if (selectedBorough && selectedNeighborhood && selectedDate) {
+            // Redirect to the event display page with the selected date in the URL
+            window.location.href = `../xml/xml.html?date=${encodeURIComponent(selectedDate)}`;
+        } else {
+            alert('Please select a borough, neighborhood, and date before proceeding.');
         }
-    });
-
-    // Event listener for the date input (optional - logs selected date)
-    $('#date-input').on('change', function() {
-        const selectedDate = $(this).val();
-        console.log('Selected date:', selectedDate); // Perform any action needed with the date
     });
 });

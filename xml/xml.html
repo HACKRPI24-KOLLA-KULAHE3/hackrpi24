@@ -16,49 +16,60 @@
     <div id="events"></div>
 
     <script>
+        // Function to get the date parameter from the URL
+        function getSelectedDateFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('date');
+        }
+
         async function loadXML() {
             try {
-                const response = await fetch('events.xml'); // Ensure 'events.xml' is in the same directory or adjust path
+                const response = await fetch('events.xml');
                 const text = await response.text();
                 const parser = new DOMParser();
                 const xml = parser.parseFromString(text, "application/xml");
                 const items = xml.getElementsByTagName('item');
 
+                const selectedDate = getSelectedDateFromURL();
+
                 for (let item of items) {
-                    const eventDiv = document.createElement('div');
-                    eventDiv.classList.add('event');
-
-                    const titleElement = item.getElementsByTagName('title')[0];
-                    const linkElement = item.getElementsByTagName('link')[0];
-                    const descriptionElement = item.getElementsByTagName('description')[0];
                     const startDateElement = item.getElementsByTagName('event:startdate')[0];
-                    const startTimeElement = item.getElementsByTagName('event:starttime')[0];
-                    const locationElement = item.getElementsByTagName('event:location')[0];
+                    const startDate = startDateElement ? startDateElement.textContent : '';
 
-                    const title = titleElement ? titleElement.textContent : 'No title available';
-                    const link = linkElement ? linkElement.textContent : '#';
-                    const description = descriptionElement ? descriptionElement.textContent : 'No description available';
-                    const startDate = startDateElement ? startDateElement.textContent : 'No date available';
-                    const startTime = startTimeElement ? startTimeElement.textContent : 'No time available';
-                    const location = locationElement ? locationElement.textContent : 'No location available';
+                    // Check if the event date matches the selected date
+                    if (startDate === selectedDate) {
+                        const eventDiv = document.createElement('div');
+                        eventDiv.classList.add('event');
 
-                    // Filter out specific details from the description
-                    const filteredDescription = description
-                        .replace(/<p>Date:.*?<\/p>/g, '')
-                        .replace(/<p>Start time:.*?<\/p>/g, '')
-                        .replace(/<p>End time:.*?<\/p>/g, '')
-                        .replace(/<p>Contact phone:.*?<\/p>/g, '')
-                        .replace(/<p>Location:.*?<\/p>/g, '');
+                        const titleElement = item.getElementsByTagName('title')[0];
+                        const linkElement = item.getElementsByTagName('link')[0];
+                        const descriptionElement = item.getElementsByTagName('description')[0];
+                        const startTimeElement = item.getElementsByTagName('event:starttime')[0];
+                        const locationElement = item.getElementsByTagName('event:location')[0];
 
-                    eventDiv.innerHTML = `
-                        <h3><a href="${link}" target="_blank">${title}</a></h3>
-                        <p><strong>Date:</strong> ${startDate}</p>
-                        <p><strong>Time:</strong> ${startTime}</p>
-                        <p><strong>Location:</strong> ${location}</p>
-                        <p>${filteredDescription}</p>
-                    `;
+                        const title = titleElement ? titleElement.textContent : 'No title available';
+                        const link = linkElement ? linkElement.textContent : '#';
+                        const description = descriptionElement ? descriptionElement.textContent : 'No description available';
+                        const startTime = startTimeElement ? startTimeElement.textContent : 'No time available';
+                        const location = locationElement ? locationElement.textContent : 'No location available';
 
-                    document.getElementById('events').appendChild(eventDiv);
+                        const filteredDescription = description
+                            .replace(/<p>Date:.*?<\/p>/g, '')
+                            .replace(/<p>Start time:.*?<\/p>/g, '')
+                            .replace(/<p>End time:.*?<\/p>/g, '')
+                            .replace(/<p>Contact phone:.*?<\/p>/g, '')
+                            .replace(/<p>Location:.*?<\/p>/g, '');
+
+                        eventDiv.innerHTML = `
+                            <h3><a href="${link}" target="_blank">${title}</a></h3>
+                            <p><strong>Date:</strong> ${startDate}</p>
+                            <p><strong>Time:</strong> ${startTime}</p>
+                            <p><strong>Location:</strong> ${location}</p>
+                            <p>${filteredDescription}</p>
+                        `;
+
+                        document.getElementById('events').appendChild(eventDiv);
+                    }
                 }
             } catch (error) {
                 console.error('Error loading XML:', error);
