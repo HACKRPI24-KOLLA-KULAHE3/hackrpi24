@@ -48,7 +48,7 @@ $(document).ready(function() {
 
         if (selectedBorough && selectedNeighborhood && selectedDate) {
             // Redirect to the event display page with the selected date in the URL
-            window.location.href = `../xml/xml.html?date=${encodeURIComponent(selectedDate)}`;
+            window.location.href = `../xml/events.html?date=${encodeURIComponent(selectedDate)}`;
         } else {
             alert('Please select a borough, neighborhood, and date before proceeding.');
         }
