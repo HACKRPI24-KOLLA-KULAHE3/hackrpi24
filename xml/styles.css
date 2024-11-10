@@ -182,3 +182,25 @@ footer {
 .simple-button:hover {
     background-color: #45a049; /* Slightly darker green on hover */
 }
+/* CSS to style the emission links as regular text */
+.emission-list a {
+    text-decoration: none; /* Remove the underline */
+    color: inherit; /* Use the current text color */
+    cursor: pointer; /* Change the cursor to indicate clickable text */
+}
+
+/* Optional: Add a hover effect to indicate interaction */
+.emission-list a:hover {
+    text-decoration: underline; /* Add an underline on hover for clarity */
+    color: #555; /* Slightly change color on hover */
+}
+
+/* Style the emission list */
+.emission-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.emission-list li {
+    margin-bottom: 0.5em;
+}
