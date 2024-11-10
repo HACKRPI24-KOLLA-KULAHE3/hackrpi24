@@ -1,21 +1,33 @@
+
+
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling with light green background */
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f3f7f3;
+    background-color: #d3e7d3; /* Light Parks Department green */
     color: #333;
     line-height: 1.6;
 }
 
+/* Header styling */
 h1 {
     text-align: center;
     padding: 20px 0;
-    background-color: #4caf50;
-    color: #fff;
+    background-color: #4caf50; /* Parks Department green */
+    color: #fff; /* White title text */
     margin: 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Events container styling */
 #events {
     width: 90%;
     max-width: 1200px;
@@ -26,11 +38,11 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Individual event styling */
 .event {
     border-bottom: 1px solid #e0e0e0;
     margin-bottom: 20px;
-    padding-bottom: 20px;
-    padding-top: 10px;
+    padding: 20px 0 20px;
     transition: transform 0.2s ease-in-out;
 }
 
@@ -58,6 +70,7 @@ h1 {
     color: #2e7d32;
 }
 
+/* Map container styling */
 .map-container {
     margin: 10px 0;
     border-radius: 10px;
@@ -65,13 +78,23 @@ h1 {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Distance text styling */
 #distance {
     margin-top: 10px;
     font-weight: bold;
     color: #388e3c;
 }
 
-/* Additional styling for dropdown and form elements */
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 100%;
+    position: relative;
+}
+
+/* Form and input styling */
 #neighborhood-dropdown, #borough-select, #neighborhood-input, #date-input, #go-button {
     display: block;
     margin: 10px auto;
@@ -110,6 +133,7 @@ h1 {
         font-size: 1.3em;
     }
 }
+
 /* Styling for carbon emissions */
 .emission-list {
     list-style: none;
@@ -142,4 +166,19 @@ h1 {
 .emission-level:hover {
     transform: scale(1.05);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.simple-button {
+    background-color: #4caf50; /* Green background */
+    color: #fff; /* White text */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Add some padding */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Slightly larger text */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.simple-button:hover {
+    background-color: #45a049; /* Slightly darker green on hover */
 }
