@@ -1,0 +1,112 @@
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f3f7f3;
+    color: #333;
+    line-height: 1.6;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #4caf50;
+    color: #fff;
+    margin: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#events {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event {
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.event:hover {
+    transform: scale(1.02);
+}
+
+.event h3 {
+    margin: 0 0 10px;
+    font-size: 1.5em;
+    color: #388e3c;
+}
+
+.event h3 a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.event p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.event p strong {
+    color: #2e7d32;
+}
+
+.map-container {
+    margin: 10px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#distance {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #388e3c;
+}
+
+/* Additional styling for dropdown and form elements */
+#neighborhood-dropdown, #borough-select, #neighborhood-input, #date-input, #go-button {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+}
+
+#neighborhood-input:focus, #borough-select:focus, #date-input:focus, #go-button:focus {
+    border-color: #4caf50;
+}
+
+#go-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#go-button:hover {
+    background-color: #45a049;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    .event h3 {
+        font-size: 1.3em;
+    }
+}

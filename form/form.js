@@ -30,7 +30,9 @@ $(document).ready(function() {
                 $('#neighborhood-dropdown').show();
                 filteredNeighborhoods.forEach(feature => {
                     const neighborhoodName = feature.properties.name;
-                    $('#neighborhood-dropdown').append(`<option value="${neighborhoodName}">${neighborhoodName}</option>`);
+                    $('#neighborhood-dropdown').append(`
+                        <option value="${neighborhoodName}">${neighborhoodName}</option>
+                    `);
                 });
             } else {
                 $('#neighborhood-dropdown').hide();

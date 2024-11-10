@@ -13,7 +13,11 @@ async function loadXML() {
     try {
         const selectedDate = getSelectedDateFromURL(); // Get the selected date from the URL
         const selectedBorough = getSelectedBoroughFromURL(); // Get the selected borough from the URL
+
+        
         const response = await fetch('events.xml'); // Ensure 'events.xml' is in the same directory or adjust path
+
+
         if (!response.ok) {
             throw new Error(`Failed to load XML file: ${response.status} ${response.statusText}`);
         }
@@ -109,6 +113,7 @@ async function loadXML() {
                     </div>
                     <p><a href="https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}" target="_blank">Get Directions</a></p>
                     <p>${filteredDescription}</p>
+                    <div id="distance">Calculating distance...</div>
                     `;
 
                     document.getElementById('events').appendChild(eventDiv);
@@ -188,3 +193,51 @@ $(document).ready(function() {
         }
     });
 });
+
+
+// Check if geolocation is available in the browser
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(success, error);
+} else {
+    alert("Geolocation is not supported by this browser.");
+}
+
+function success(position) {
+    const userLatitude = position.coords.latitude;
+    const userLongitude = position.coords.longitude;
+    const destinationLatitude = 40.7128; // Replace with your destination latitude
+    const destinationLongitude = -74.0060; // Replace with your destination longitude
+
+    // Make a request to the Google Maps Distance Matrix API
+    const apiKey = 'AIzaSyD9AHcZ354omb7QqEyx2xtSZKaed7thlUs';
+    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${userLatitude},${userLongitude}&destinations=${destinationLatitude},${destinationLongitude}&key=${apiKey}`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status !== 'OK') {
+                throw new Error(`API error: ${data.status}`);
+            }
+            const element = data.rows[0].elements[0];
+            if (element.status !== 'OK') {
+                throw new Error(`Element status error: ${element.status}`);
+            }
+            const distance = element.distance.text;
+            console.log("Distance: ", distance);
+            document.getElementById("distance").innerText = `Distance: ${distance}`;
+        })
+        .catch(err => {
+            console.error("Error fetching distance data:", err);
+            document.getElementById("distance").innerText = `Error calculating distance. Please try again.`;
+        });
+}
+
+function error() {
+    alert("Unable to retrieve your location");
+}
+
