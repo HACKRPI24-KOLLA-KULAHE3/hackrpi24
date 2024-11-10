@@ -42,6 +42,13 @@ $(document).ready(function() {
         }
     });
 
+    // Autofill neighborhood input when an option is selected from the dropdown
+    $('#neighborhood-dropdown').on('change', function() {
+        const selectedNeighborhood = $(this).val();
+        $('#neighborhood-input').val(selectedNeighborhood);
+        $('#neighborhood-dropdown').hide(); // Hide the dropdown after selection
+    });
+
     // Event listener for the "Go" button
     $('#go-button').on('click', function() {
         const selectedBorough = $('#borough-select').val();

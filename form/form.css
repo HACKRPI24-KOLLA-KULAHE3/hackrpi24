@@ -5,12 +5,14 @@
     box-sizing: border-box;
 }
 
-/* Ensure the body takes up the full viewport height */
+/* Apply body font */
 html, body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    font-family: Arial, sans-serif;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+    background-color: #d3e7d3; /* Light green Parks Department color */
+    color: #333; /* Consistent dark text color for readability */
 }
 
 /* Main content container grows to push footer to the bottom */
@@ -21,9 +23,18 @@ html, body {
 
 /* Header styling */
 .headerBox {
-    background-color: #f8f8f8;
+    background-color: #f5f5dc; /* Eggshell white color */
     padding: 10px;
     text-align: center;
+    border-bottom: 1px solid #ccc; /* Optional subtle border for separation */
+}
+
+/* Header title font style */
+.headerBox h1 {
+    font-family: 'Playfair Display', serif;
+    color: #333; /* Darker text color for contrast */
+    font-size: 2.5em; /* Slightly larger for a refined look */
+    margin: 0;
 }
 
 /* Footer styles to keep it at the bottom */
@@ -33,4 +44,77 @@ footer {
     background-color: #f1f1f1;
     width: 100%;
     position: relative;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+}
+
+/* Enlarged form styling */
+#neighborhood-form {
+    width: 95%;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #f5f5dc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 1.1em;
+}
+
+/* Label styling */
+#neighborhood-form label {
+    font-weight: 600; /* Slightly heavier for emphasis */
+    color: #333;
+    margin-top: 15px;
+    display: block;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+    font-size: 1.2em;
+}
+
+/* Dropdown, input, and button styling */
+#neighborhood-dropdown, #borough-select, #neighborhood-input, #date-input, #go-button {
+    display: block;
+    margin: 12px 0;
+    padding: 15px;
+    width: 100%;
+    font-size: 1.1em;
+    background-color: #fafaf0; /* Slightly lighter eggshell for form fields */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+    transition: border-color 0.3s ease-in-out;
+}
+
+/* Focus effect for inputs */
+#neighborhood-input:focus, #borough-select:focus, #date-input:focus, #go-button:focus {
+    border-color: #4caf50;
+}
+
+/* Go button styling */
+#go-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1.2em;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+}
+
+#go-button:hover {
+    background-color: #45a049;
+}
+
+/* Optional dropdown styling */
+#neighborhood-dropdown {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    #neighborhood-form {
+        padding: 20px;
+        font-size: 1em;
+    }
 }
