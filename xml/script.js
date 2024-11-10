@@ -42,7 +42,8 @@ async function loadXML() {
                 if (coordinates !== 'No coordinates available') {
                     [latitude, longitude] = coordinates.split(',').map(coord => coord.trim());
                     if (!latitude || !longitude) {
-                        throw new ReferenceError('Latitude or longitude is not defined');
+                        console.error('Latitude or longitude is undefined');
+                        continue; // Skip to the next item if the coordinates are invalid
                     }
 
                     // Fetch full address using Google Maps Geocoding API
