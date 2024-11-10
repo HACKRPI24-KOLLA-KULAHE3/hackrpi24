@@ -9,14 +9,39 @@ function getSelectedBoroughFromURL() {
     return urlParams.get('borough');
 }
 
+// Function to calculate distance using the Haversine formula
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const toRadians = (degree) => degree * (Math.PI / 180);
+    const R = 6371; // Radius of Earth in kilometers
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+    const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in kilometers
+}
+
+// Function to calculate carbon emissions based on distance
+function calculateCarbonEmissions(distance) {
+    const walkingEmission = 0; // kg CO2 per km (essentially zero for walking)
+    const drivingEmission = 0.21; // kg CO2 per km (average for a car)
+    const transitEmission = 0.06; // kg CO2 per km (average for public transit)
+
+    return {
+        walking: (walkingEmission * distance).toFixed(2),
+        driving: (drivingEmission * distance).toFixed(2),
+        transit: (transitEmission * distance).toFixed(2)
+    };
+}
+
 async function loadXML() {
     try {
         const selectedDate = getSelectedDateFromURL(); // Get the selected date from the URL
         const selectedBorough = getSelectedBoroughFromURL(); // Get the selected borough from the URL
 
-        
         const response = await fetch('events.xml'); // Ensure 'events.xml' is in the same directory or adjust path
-
 
         if (!response.ok) {
             throw new Error(`Failed to load XML file: ${response.status} ${response.statusText}`);
@@ -44,7 +69,7 @@ async function loadXML() {
 
                 let latitude, longitude;
                 if (coordinates !== 'No coordinates available') {
-                    [latitude, longitude] = coordinates.split(',').map(coord => coord.trim());
+                    [latitude, longitude] = coordinates.split(',').map(coord => parseFloat(coord.trim()));
                     if (!latitude || !longitude) {
                         console.error('Latitude or longitude is undefined');
                         continue; // Skip to the next item if the coordinates are invalid
@@ -86,6 +111,24 @@ async function loadXML() {
                     const startTime = startTimeElement ? startTimeElement.textContent : 'No time available';
                     const location = locationElement ? locationElement.textContent : 'No location available';
 
+                    // Calculate the distance from the fixed starting point
+                    const startLatitude = 42.7284; // Fixed latitude
+                    const startLongitude = -73.6918; // Fixed longitude
+                    const distance = calculateDistance(startLatitude, startLongitude, latitude, longitude).toFixed(2);
+
+                    // Calculate carbon emissions
+                    const emissions = calculateCarbonEmissions(distance);
+
+                    // Determine emission levels
+                    const getEmissionLevel = (value) => {
+                        if (value <= 0.1) return 'low';
+                        if (value <= 0.5) return 'medium';
+                        return 'high';
+                    };
+
+                    const drivingLevel = getEmissionLevel(emissions.driving);
+                    const transitLevel = getEmissionLevel(emissions.transit);
+
                     // Filter out specific details from the description
                     const filteredDescription = description
                         .replace(/<p>Date:.*?<\/p>/g, '')
@@ -100,6 +143,13 @@ async function loadXML() {
                         <p><strong>Time:</strong> ${startTime}</p>
                         <p><strong>Location:</strong> ${location}</p>
                         <p><strong>Borough:</strong> ${borough}</p>
+                        <p><strong>Distance from starting point:</strong> ${distance} km</p>
+                        <p><strong>Carbon Emissions:</strong></p>
+                        <ul class="emission-list">
+                            <li class="emission-level ${drivingLevel}">Driving: ${emissions.driving} kg CO2</li>
+                            <li class="emission-level ${transitLevel}">Transit: ${emissions.transit} kg CO2</li>
+                            <li class="emission-level low">Walking: ${emissions.walking} kg CO2</li>
+                        </ul>
 
                         <div class="map-container">
                         <iframe 
@@ -113,13 +163,14 @@ async function loadXML() {
                     </div>
                     <p><a href="https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}" target="_blank">Get Directions</a></p>
                     <p>${filteredDescription}</p>
-                    <div id="distance">Calculating distance...</div>
+                    <div id="distance">Distance calculated: ${distance} km</div>
                     `;
 
                     document.getElementById('events').appendChild(eventDiv);
                 }
             }
         }
+
 
         // If no events are found for the selected date and borough
         if (!eventsFound) {
@@ -134,6 +185,8 @@ loadXML();
 
 $(document).ready(function() {
     let neighborhoodsData = [];
+
+
 
     // Fetch the JSON data and store it
     fetch('jsonminifier.json')
@@ -165,6 +218,9 @@ $(document).ready(function() {
             });
 
             // Show the dropdown with filtered options
+
+
+            // Show the dropdown with filtered options
             if (filteredNeighborhoods.length > 0) {
                 $('#neighborhood-dropdown').show();
                 filteredNeighborhoods.forEach(feature => {
@@ -194,50 +250,4 @@ $(document).ready(function() {
     });
 });
 
-
-// Check if geolocation is available in the browser
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(success, error);
-} else {
-    alert("Geolocation is not supported by this browser.");
-}
-
-function success(position) {
-    const userLatitude = position.coords.latitude;
-    const userLongitude = position.coords.longitude;
-    const destinationLatitude = 40.7128; // Replace with your destination latitude
-    const destinationLongitude = -74.0060; // Replace with your destination longitude
-
-    // Make a request to the Google Maps Distance Matrix API
-    const apiKey = 'AIzaSyD9AHcZ354omb7QqEyx2xtSZKaed7thlUs';
-    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${userLatitude},${userLongitude}&destinations=${destinationLatitude},${destinationLongitude}&key=${apiKey}`;
-
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status !== 'OK') {
-                throw new Error(`API error: ${data.status}`);
-            }
-            const element = data.rows[0].elements[0];
-            if (element.status !== 'OK') {
-                throw new Error(`Element status error: ${element.status}`);
-            }
-            const distance = element.distance.text;
-            console.log("Distance: ", distance);
-            document.getElementById("distance").innerText = `Distance: ${distance}`;
-        })
-        .catch(err => {
-            console.error("Error fetching distance data:", err);
-            document.getElementById("distance").innerText = `Error calculating distance. Please try again.`;
-        });
-}
-
-function error() {
-    alert("Unable to retrieve your location");
-}
 

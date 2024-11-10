@@ -110,3 +110,36 @@ h1 {
         font-size: 1.3em;
     }
 }
+/* Styling for carbon emissions */
+.emission-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.emission-level {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+}
+
+.emission-level.low {
+    background-color: #4caf50; /* Green for low emissions */
+}
+
+.emission-level.medium {
+    background-color: #ffc107; /* Yellow for medium emissions */
+}
+
+.emission-level.high {
+    background-color: #f44336; /* Red for high emissions */
+}
+
+/* Add hover effects */
+.emission-level:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
