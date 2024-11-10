@@ -31,7 +31,7 @@ html, body {
 
 /* Header title font style */
 .headerBox h1 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Poppins', Arial, sans-serif;
     color: #333; /* Darker text color for contrast */
     font-size: 2.5em; /* Slightly larger for a refined look */
     margin: 0;

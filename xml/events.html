@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NYC Events Display</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .event { border-bottom: 1px solid #ddd; margin-bottom: 20px; padding-bottom: 20px; }
-        .event h3 { margin: 0; }
-        .event p { margin: 5px 0; }
-    </style>
 </head>
 <body>
-    <h1>Upcoming NYC Parks Events</h1>
-<br>
-    <button class="simple-button" onclick="window.location.href='../form/index.html';">Update Search</button>
+    <!-- Logo at the top -->
+    <div style="text-align: center; padding: 20px;">
+        <img src="transparent_ecopathways_logo.png" alt="EcoPathways Logo" style="width: 120px;">
+    </div>
 
+    <h1 style="text-align: center;">Upcoming NYC Parks Events</h1>
+
+    <!-- Centered button -->
+    <div class="button-container">
+        <button class="simple-button" onclick="window.location.href='../form/index.html';">Update Search</button>
+    </div>
 
     <div id="events"></div>
 
