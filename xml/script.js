@@ -137,36 +137,50 @@ async function loadXML() {
                         .replace(/<p>Contact phone:.*?<\/p>/g, '')
                         .replace(/<p>Location:.*?<\/p>/g, '');
 
-                    eventDiv.innerHTML = `
-                        <h3><a href="${link}" target="_blank">${title}</a></h3>
-                        <p><strong>Date:</strong> ${startDate}</p>
-                        <p><strong>Time:</strong> ${startTime}</p>
-                        <p><strong>Location:</strong> ${location}</p>
-                        <p><strong>Borough:</strong> ${borough}</p>
-                        <p><strong>Distance from starting point:</strong> ${distance} km</p>
-                        <p><strong>Carbon Emissions:</strong></p>
-                        <ul class="emission-list">
-                            <li class="emission-level ${drivingLevel}">Driving: ${emissions.driving} kg CO2</li>
-                            <li class="emission-level ${transitLevel}">Transit: ${emissions.transit} kg CO2</li>
-                            <li class="emission-level low">Walking: ${emissions.walking} kg CO2</li>
-                        </ul>
+// Modify this part of the eventDiv innerHTML to include clickable links
+eventDiv.innerHTML = `
+    <h3><a href="${link}" target="_blank">${title}</a></h3>
+    <p><strong>Date:</strong> ${startDate}</p>
+    <p><strong>Time:</strong> ${startTime}</p>
+    <p><strong>Location:</strong> ${location}</p>
+    <p><strong>Borough:</strong> ${borough}</p>
+    <p><strong>Distance from starting point:</strong> ${distance} km</p>
+    <p><strong>Carbon Emissions:</strong></p>
+    <ul class="emission-list">
+        <li class="emission-level ${drivingLevel}">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=driving" target="_blank">
+                Driving: ${emissions.driving} kg CO2
+            </a>
+        </li>
+        <li class="emission-level ${transitLevel}">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=transit" target="_blank">
+                Transit: ${emissions.transit} kg CO2
+            </a>
+        </li>
+        <li class="emission-level low">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=walking" target="_blank">
+                Walking: ${emissions.walking} kg CO2
+            </a>
+        </li>
+    </ul>
 
-                        <div class="map-container">
-                        <iframe 
-                            width="100%" 
-                            height="300" 
-                            frameborder="0" 
-                            style="border:0" 
-                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD9AHcZ354omb7QqEyx2xtSZKaed7thlUs&q=${latitude},${longitude}" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <p><a href="https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}" target="_blank">Get Directions</a></p>
-                    <p>${filteredDescription}</p>
-                    <div id="distance">Distance calculated: ${distance} km</div>
-                    `;
+    <div class="map-container">
+        <iframe 
+            width="100%" 
+            height="300" 
+            frameborder="0" 
+            style="border:0" 
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD9AHcZ354omb7QqEyx2xtSZKaed7thlUs&q=${latitude},${longitude}" 
+            allowfullscreen>
+        </iframe>
+    </div>
+    <p><a href="https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}" target="_blank">Get Directions</a></p>
+    <p>${filteredDescription}</p>
+    <div id="distance">Distance calculated: ${distance} km</div>
+`;
 
-                    document.getElementById('events').appendChild(eventDiv);
+document.getElementById('events').appendChild(eventDiv);
+
                 }
             }
         }
