@@ -55,11 +55,14 @@ $(document).ready(function() {
         const selectedNeighborhood = $('#neighborhood-input').val();
         const selectedDate = $('#date-input').val();
 
-        if (selectedBorough && selectedNeighborhood && selectedDate) {
-            // Redirect to the event display page with the selected borough and date in the URL
-            window.location.href = `../xml/events.html?date=${encodeURIComponent(selectedDate)}&borough=${encodeURIComponent(selectedBorough)}`;
+        if (selectedBorough && selectedDate) {
+            // Check if a neighborhood was selected
+            const neighborhoodParam = selectedNeighborhood ? `&neighborhood=${encodeURIComponent(selectedNeighborhood)}` : '';
+            
+            // Redirect to the event display page with the selected borough, date, and optional neighborhood in the URL
+            window.location.href = `../xml/events.html?date=${encodeURIComponent(selectedDate)}&borough=${encodeURIComponent(selectedBorough)}${neighborhoodParam}`;
         } else {
-            alert('Please select a borough, neighborhood, and date before proceeding.');
+            alert('Please select a borough and date before proceeding.');
         }
     });
 });
