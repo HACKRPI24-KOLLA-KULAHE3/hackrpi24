@@ -14,6 +14,9 @@ async function loadXML() {
         const selectedDate = getSelectedDateFromURL(); // Get the selected date from the URL
         const selectedBorough = getSelectedBoroughFromURL(); // Get the selected borough from the URL
         const response = await fetch('events.xml'); // Ensure 'events.xml' is in the same directory or adjust path
+        if (!response.ok) {
+            throw new Error(`Failed to load XML file: ${response.status} ${response.statusText}`);
+        }
         const text = await response.text();
         const parser = new DOMParser();
         const xml = parser.parseFromString(text, "application/xml");
@@ -35,8 +38,12 @@ async function loadXML() {
                 const coordinatesElement = item.getElementsByTagName('event:coordinates')[0];
                 const coordinates = coordinatesElement ? coordinatesElement.textContent : 'No coordinates available';
 
+                let latitude, longitude;
                 if (coordinates !== 'No coordinates available') {
-                    const [latitude, longitude] = coordinates.split(',').map(coord => coord.trim());
+                    [latitude, longitude] = coordinates.split(',').map(coord => coord.trim());
+                    if (!latitude || !longitude) {
+                        throw new ReferenceError('Latitude or longitude is not defined');
+                    }
 
                     // Fetch full address using Google Maps Geocoding API
                     try {
@@ -88,7 +95,19 @@ async function loadXML() {
                         <p><strong>Time:</strong> ${startTime}</p>
                         <p><strong>Location:</strong> ${location}</p>
                         <p><strong>Borough:</strong> ${borough}</p>
-                        <p>${filteredDescription}</p>
+
+                        <div class="map-container">
+                        <iframe 
+                            width="100%" 
+                            height="300" 
+                            frameborder="0" 
+                            style="border:0" 
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD9AHcZ354omb7QqEyx2xtSZKaed7thlUs&q=${latitude},${longitude}" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p><a href="https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}" target="_blank">Get Directions</a></p>
+                    <p>${filteredDescription}</p>
                     `;
 
                     document.getElementById('events').appendChild(eventDiv);
@@ -112,7 +131,12 @@ $(document).ready(function() {
 
     // Fetch the JSON data and store it
     fetch('jsonminifier.json')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load JSON file: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
         .then(data => {
             neighborhoodsData = data.features;
         })
