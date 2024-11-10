@@ -13,7 +13,7 @@ $(document).ready(function() {
     $('#neighborhood-input').on('input', function() {
         const selectedBorough = $('#borough-select').val();
         const inputText = $(this).val().toLowerCase();
-        
+
         // Clear previous options
         $('#neighborhood-dropdown').empty();
 
@@ -47,8 +47,8 @@ $(document).ready(function() {
         const selectedDate = $('#date-input').val();
 
         if (selectedBorough && selectedNeighborhood && selectedDate) {
-            // Redirect to the event display page with the selected date in the URL
-            window.location.href = `../xml/events.html?date=${encodeURIComponent(selectedDate)}`;
+            // Redirect to the event display page with the selected borough and date in the URL
+            window.location.href = `../xml/events.html?date=${encodeURIComponent(selectedDate)}&borough=${encodeURIComponent(selectedBorough)}`;
         } else {
             alert('Please select a borough, neighborhood, and date before proceeding.');
         }
